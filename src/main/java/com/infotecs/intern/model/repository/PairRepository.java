@@ -23,7 +23,14 @@ public interface PairRepository extends CrudRepository<Pair, Long> {
     @Transactional
     @Query("DELETE FROM pair\n" +
             "WHERE \n" +
-            "PARSEDATETIME(timeStamp,'yyyyMMddHHmmss') <= CURRENT_TIMESTAMP()\n")
+            "PARSEDATETIME(timeStamp,'yyyy-MM-dd.HH:mm:ss') <= CURRENT_TIMESTAMP()\n")
     void cleanExpiredTTL();
 
+    @Transactional
+    @Query(value = "call CSVWRITE(?1, 'SELECT * FROM pair')", nativeQuery = true)
+    void dump(String path);
+
+    /*
+    TODO: load dump query, probably something like this Create table tablename as select * from CSVREAD('classpath:/dump.csv');
+     */
 }

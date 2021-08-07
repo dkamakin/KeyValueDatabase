@@ -3,6 +3,7 @@ package com.infotecs.intern.controller;
 import com.infotecs.intern.model.Pair;
 import com.infotecs.intern.model.service.PairService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +24,11 @@ public class UploadController {
     @GetMapping
     public ModelAndView getUploadPage() {
         return new ModelAndView("upload");
+    }
+
+    @GetMapping("/dump")
+    public Resource dump() {
+        return pairService.dump();
     }
 
     @GetMapping("/list")
@@ -57,8 +63,8 @@ public class UploadController {
     }
 
     @DeleteMapping("/{key}")
-    public void deleteMapping(@PathVariable String key) {
-        pairService.deleteValueByKey(key);
+    public String deleteMapping(@PathVariable String key) {
+        return pairService.deleteValueByKey(key);
     }
 
 }

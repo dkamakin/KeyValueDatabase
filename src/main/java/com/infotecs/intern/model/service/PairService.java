@@ -3,11 +3,16 @@ package com.infotecs.intern.model.service;
 import com.infotecs.intern.model.Pair;
 import com.infotecs.intern.model.repository.PairRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -57,6 +62,33 @@ public class PairService {
         return actualPairs;
     }
 
+    /*
+    TODO: dump file name must be deleted
+     */
+
+    public Resource dump() {
+        log.info("Dumping data");
+        try {
+            Path file = Paths.get("").resolve(Paths
+                    .get("dump.csv").normalize()).toAbsolutePath();
+
+            log.info("Request to dump to {}", file);
+            pairRepository.dump(file.toString());
+            log.info("The query is done successfully");
+
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                log.info("Dumped successfully");
+                return resource;
+            } else {
+                throw new MalformedURLException("Error: wrong path " + file);
+            }
+        } catch (MalformedURLException e) {
+            log.info("Error while getting dump. {}", e.getMessage());
+            return null;
+        }
+    }
+
     public Optional<Pair> getPairByKey(String key) {
         log.info("Get pair by key: {}", key);
         Optional<Pair> pair = pairRepository.findValueByKey(key);
@@ -78,7 +110,7 @@ public class PairService {
         return value;
     }
 
-    @Scheduled(fixedDelay = 100000)
+    @Scheduled(fixedDelay = 10000)
     public void cleanExpiredTTL() {
         log.info("Scheduled job: clean expired TTL");
         pairRepository.cleanExpiredTTL();
