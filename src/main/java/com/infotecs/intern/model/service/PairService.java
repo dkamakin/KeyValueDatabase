@@ -42,6 +42,11 @@ public class PairService {
         return pair.isPresent() ? pair.get().getValue() : "null";
     }
 
+    public Iterable<Pair> getPairs() {
+        log.info("Returning a list of the pairs");
+        return pairRepository.findAll();
+    }
+
     public Optional<Pair> getPairByKey(String key) {
         log.info("Get pair by key: {}", key);
         Optional<Pair> pair = pairRepository.findValueByKey(key);
@@ -62,13 +67,13 @@ public class PairService {
         return value;
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 100000)
     public void cleanExpiredTTL() {
         log.info("Scheduled job: clean expired TTL");
         pairRepository.cleanExpiredTTL();
     }
 
-    public void savePair(String key, String value, Integer ttl) {
+    public boolean savePair(String key, String value, Integer ttl) {
         log.info("Saving {}:{} to the repository with ttl: {}", key, value, ttl);
         Optional<Pair> pair = getPairByKey(key);
         String time = LocalDateTime.now().plusSeconds(ttl).format(dateTimeFormatter);
@@ -82,6 +87,7 @@ public class PairService {
         }
 
         log.info("Saved successfully");
+        return true;
     }
 
 }
