@@ -9,12 +9,26 @@ fetch('/upload/list')
 
         for (let pair of data) {
             container.innerHTML += "    <tr>\n" +
-                "      <th scope=\"row\">#</th>\n" +
+                "      <th scope=\"row\">" + pair['id'] + "</th>\n" +
                 "      <td>" + pair['key'] + "</td>\n" +
                 "      <td>" + pair['value'] + "</td>\n" +
                 "      <td>" + pair['timeStamp'] + "</td>\n" +
+                "          <td>\n" +
+                "            <button type=\"button\" class=\"btn btn-danger\" id=\"" + pair['key'] + "\" onclick=\"actionDelete(this.id)\"><i class=\"far fa-trash-alt\"></i>Delete</button>" +
+                "          </td>\n" +
                 "    </tr>";
         }
 
         container.classList.remove('loading');
     });
+
+function actionDelete(id) {
+    console.log("Delete elem: " + id);
+    fetch('/upload/' + id, {
+        method: 'DELETE',
+    }).then(response => {
+        return response.json()
+    }).then(data =>
+        console.log(data)
+    );
+}

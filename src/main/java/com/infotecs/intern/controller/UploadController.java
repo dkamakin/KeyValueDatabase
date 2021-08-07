@@ -56,8 +56,8 @@ public class UploadController {
         return pair.isPresent() ? pair.get().toString() : "null";
     }
 
-    @DeleteMapping
-    public void deleteMapping(@RequestParam String key) {
+    @DeleteMapping("/{key}")
+    public void deleteMapping(@PathVariable String key) {
         pairService.deleteValueByKey(key);
     }
 

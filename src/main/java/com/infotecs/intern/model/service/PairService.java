@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -60,6 +61,7 @@ public class PairService {
         return pair;
     }
 
+    @Transactional
     public String deleteValueByKey(String key) {
         String value = getValueByKey(key);
         pairRepository.deleteByKey(key);
