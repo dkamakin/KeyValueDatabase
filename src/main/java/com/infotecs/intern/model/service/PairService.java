@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,7 +24,7 @@ public class PairService {
 
     public PairService(PairRepository pairRepository) {
         this.pairRepository = pairRepository;
-        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd.HH:mm:ss");
     }
 
     public boolean isTimeStampExpired(String timeStamp) {
@@ -45,7 +47,14 @@ public class PairService {
 
     public Iterable<Pair> getPairs() {
         log.info("Returning a list of the pairs");
-        return pairRepository.findAll();
+        List<Pair> actualPairs = new ArrayList<>();
+
+        for (Pair pair : pairRepository.findAll()) {
+            if (!isTimeStampExpired(pair.getTimeStamp()))
+                actualPairs.add(pair);
+        }
+
+        return actualPairs;
     }
 
     public Optional<Pair> getPairByKey(String key) {
