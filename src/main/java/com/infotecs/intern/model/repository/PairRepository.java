@@ -4,9 +4,10 @@ import com.infotecs.intern.model.Pair;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
@@ -27,10 +28,16 @@ public interface PairRepository extends CrudRepository<Pair, Long> {
     void cleanExpiredTTL();
 
     @Transactional
-    @Query(value = "call CSVWRITE(?1, 'SELECT * FROM pair')", nativeQuery = true)
-    void dump(String path);
+    @Query(value = "CALL CSVWRITE(:path, 'SELECT * FROM pair')", nativeQuery = true)
+    void dump(@Param("path") String path);
 
-    /*
-    TODO: load dump query, probably something like this Create table tablename as select * from CSVREAD('classpath:/dump.csv');
-     */
+    @Transactional
+    @Modifying
+    @Query(value = "CREATE TABLE pair AS SELECT * FROM CSVREAD('tempDump.csv')", nativeQuery = true)
+    void load(@Param("fileName") String path);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DROP TABLE pair", nativeQuery = true)
+    void dropPair();
 }

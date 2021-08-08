@@ -40,3 +40,19 @@ function actionDelete(id) {
 
     location.reload();
 }
+
+function actionLoad() {
+    let input = document.createElement('input');
+    input.type = 'file';
+
+    input.onchange = e => {
+        let file = e.target.files[0];
+        let formData = new FormData();
+
+        formData.append("file", file);
+        fetch('/upload/load', {method: "POST", body: formData});
+        location.reload();
+    }
+
+    input.click();
+}
