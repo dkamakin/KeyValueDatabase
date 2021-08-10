@@ -2,15 +2,22 @@
 
 A key–value database, or key–value store, is a data storage paradigm designed for storing, retrieving, and managing associative arrays.
 
+![img](https://user-images.githubusercontent.com/54929583/128924448-74dafb34-bee1-42d1-a4a4-2e6e2bedd68e.jpg)
+
 # FAQ
 ## How to run?
 
 Download intern.jar, then run **java -jar intern.jar** in the terminal.
+
 To access the website, go to localhost:8080.
 
 ## What are the options?
 
-You can upload a new pair by specifying key, value, and TTL. To do so, go to the upload page. To delete the value, press the big red button on the main page. To make a dump or load, choose the "File" option.
+You can upload a new pair by specifying key, value, and TTL. To do so, go to the upload page. 
+
+To delete the value, press the big red button on the main page. 
+
+To make a dump or load, choose the "File" option.
 
 ## What are the available HTTP requests?
 GET:
