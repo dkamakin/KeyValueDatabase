@@ -124,7 +124,12 @@ public class PairService {
             pair.get().setTimeStamp(ttl);
             pair.get().setValue(value);
         } else {
-            pairRepository.save(new Pair(key, value, ttl));
+            try {
+                pairRepository.save(new Pair(key, value, ttl));
+            } catch (DataAccessException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
 
         log.info("Saved successfully");
