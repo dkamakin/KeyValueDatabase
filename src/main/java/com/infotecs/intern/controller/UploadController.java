@@ -74,7 +74,7 @@ public class UploadController {
 
     @DeleteMapping("/{key}")
     public String deleteMapping(@PathVariable String key) {
-        return pairService.deleteValueByKey(key);
+        return pairService.deletePairByKey(key);
     }
 
 }

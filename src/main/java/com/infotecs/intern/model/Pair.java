@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,10 +25,14 @@ public class Pair {
     @Column(name = "timestamp")
     private String timeStamp;
 
-    public Pair(String key, String value, String timeStamp) {
+    public Pair(String key, String value, Integer ttl) {
         this.key = key;
         this.value = value;
-        this.timeStamp = timeStamp;
+        this.timeStamp = TimeStampGenerator.getCurrentTimeStamp(ttl);
+    }
+
+    public void setTimeStamp(Integer ttl) {
+        this.timeStamp = TimeStampGenerator.getCurrentTimeStamp(ttl);
     }
 
     @Override
