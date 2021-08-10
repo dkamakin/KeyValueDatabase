@@ -16,15 +16,24 @@ public interface PairRepository extends CrudRepository<Pair, Long> {
     @Override
     Optional<Pair> findById(Long aLong);
 
-    Optional<Pair> findValueByKey(String key);
+    @Override
+    @Query(value = "SELECT * FROM pair\n" +
+            "WHERE \n" +
+            "PARSEDATETIME(timeStamp, 'yyyy-MM-dd.HH:mm:ss') > CURRENT_TIMESTAMP()\n", nativeQuery = true)
+    Iterable<Pair> findAll();
 
-    void deleteByKey(String key);
+    @Query(value = "SELECT * FROM pair\n" +
+            "WHERE \n" +
+            "PARSEDATETIME(timeStamp, 'yyyy-MM-dd.HH:mm:ss') > CURRENT_TIMESTAMP() AND key = :key \n", nativeQuery = true)
+    Optional<Pair> findValueByKey(@Param("key") String key);
+
+    void deletePairByKey(String key);
 
     @Modifying
     @Transactional
     @Query("DELETE FROM pair\n" +
             "WHERE \n" +
-            "PARSEDATETIME(timeStamp,'yyyy-MM-dd.HH:mm:ss') <= CURRENT_TIMESTAMP()\n")
+            "PARSEDATETIME(timeStamp, 'yyyy-MM-dd.HH:mm:ss') <= CURRENT_TIMESTAMP()\n")
     void cleanExpiredTTL();
 
     @Transactional
@@ -39,5 +48,5 @@ public interface PairRepository extends CrudRepository<Pair, Long> {
     @Modifying
     @Transactional
     @Query(value = "DROP TABLE pair", nativeQuery = true)
-    void dropPair();
+    void dropTablePair();
 }
