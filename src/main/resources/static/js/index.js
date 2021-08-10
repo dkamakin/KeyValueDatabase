@@ -24,8 +24,6 @@ function fillTable() {
 
             container.classList.remove('loading');
         });
-
-
 }
 
 function actionDelete(id) {
