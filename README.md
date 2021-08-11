@@ -1,4 +1,4 @@
-# Key-value storage service
+# Key-value database
 
 A key–value database, or key–value store, is a data storage paradigm designed for storing, retrieving, and managing associative arrays.
 
