@@ -46,3 +46,7 @@ To handle requests, RestController was implemented. Business logic contains in p
 ### H2
 
 The Entity Pair contains the key, value, and timestamp when the pair should be removed. The UploadController has no business logic, so after receiving the pair, it sends the data to the model. PairService checks if the pair has already been added to the repository and if so, updates the value and TTL, otherwise it saves the new entity.
+
+Author: [Daniil Kamakin](https://github.com/dkamakin)
+
+[GitHub repository](https://github.com/dkamakin/KeyValueDatabase)
