@@ -37,8 +37,12 @@ DELETE:
 
 ### About TTL
 
-Query request to the repository in pairRepository compares saved timestamp with the current. If the timestamp is outdated, then return null. There is a scheduled task that deletes all useless pairs.
+Query request to the repository in PairRepository compares saved timestamp with the current. If the timestamp is outdated, then return null. There is a scheduled task that deletes all useless pairs.
 
 ### HTTP
 
 To handle requests, RestController was implemented. Business logic contains in pairService.
+
+### H2
+
+The Entity Pair contains the key, value, and timestamp when the pair should be removed. The UploadController has no business logic, so after receiving the pair, it sends the data to the model. PairService checks if the pair has already been added to the repository and if so, updates the value and TTL, otherwise it saves the new entity.
